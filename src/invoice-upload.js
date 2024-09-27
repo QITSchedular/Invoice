@@ -67,14 +67,12 @@ const PdfToImages = () => {
             canvas.height = viewport.height;
             canvas.width = viewport.width;
 
-            // Render the page
             await page.render({ canvasContext: context, viewport }).promise;
 
-            // Highlight matched text
             matches.forEach(match => {
                 if (match.page === i) {
-                    context.fillStyle = 'rgba(255, 255, 0, 0.5)'; // yellow highlight with transparency
-                    context.fillRect(match.x, viewport.height - match.y, match.width, match.height); // Y-axis is inverted
+                    context.fillStyle = 'rgba(255, 255, 0, 0.5)';
+                    context.fillRect(match.x, viewport.height - match.y, match.width, match.height);
                 }
             });
 
@@ -96,7 +94,7 @@ const PdfToImages = () => {
 
             for (const item of textContent.items) {
                 const str = item.str;
-                const transform = item.transform;  // Contains position (x, y) and scale
+                const transform = item.transform;
 
                 for (const key in jsonData) {
                     const regex = new RegExp(`${key}\\s*:?\\s*([^\\s]+)`, 'i');
@@ -105,14 +103,13 @@ const PdfToImages = () => {
                     if (match) {
                         const value = match[1];
 
-                        // Store the matched key, value, and the position (x, y, width, height) for highlighting
                         matchesFound.push({
                             key: key,
                             value: value,
-                            x: transform[4], // x position
-                            y: transform[5], // y position
-                            width: item.width,  // width of the text item
-                            height: item.height,  // height of the text item
+                            x: transform[4],
+                            y: transform[5],
+                            width: item.width,
+                            height: item.height,
                             page: i
                         });
                     }
